@@ -1,21 +1,24 @@
 from mongoengine import *
 from models import Stock
-from smart_open import open
+#from smart_open import open
 import json
 import string
 
 
 def fetchStocks():
     connect('stockenex')
-    with open('s3://stockenex/colorMap.json', 'r') as c:
-        colorMap = json.load(c)[1]
-    with open('s3://stockenex/stockDataFileCount.txt') as fc:
-        fileCount = int(fc.readline())
+    #with open('s3://stockenex/colorMap.json', 'r') as c:
+    with open('s3Mock/colorMap.json', 'r') as c:
+            colorMap = json.load(c)[0]
+    #with open('s3://stockenex/stockDataFileCount.txt') as fc:
+        #fileCount = int(fc.readline())
 
     Stock.objects.delete()
-    for i in range(1, fileCount + 1):
+    #for i in range(1, fileCount + 1):
+    for i in range(1, 3):
         date = ""
-        for line in open('s3://stockenex/stockData' + str(i) + '.csv'):
+        #for line in open('s3://stockenex/stockData' + str(i) + '.csv'):
+        for line in open('s3Mock/stockData' + str(i) + '.csv'):
             if ('Symbol,"S, D","S, D"' in line or "Trade in Profit Range" in line):
                 continue
             if "Date" in line:
@@ -24,15 +27,12 @@ def fetchStocks():
             lineInfo = line.split(',', 2)
             symbol = lineInfo[0]
             color = lineInfo[1].lower()
-            if color == "cyan":
-                color = "cyan3"
-            if color in colorMap.keys():
-                color = colorMap[color]
-            color = string.upper(color)
-            if color == "#005F00" or color == "#1CAC78":
+            color = colorMap[color]
+            color = color.upper()
+            '''if color == "#005F00" or color == "#1CAC78":
                 color = "#1CAC78"
             elif color == "#1F75FE" or color == "#000080" or color == "#00D7AF":
-                color = "#00D7AF"
+                color = "#00D7AF"'''
 
             value = lineInfo[2]
 

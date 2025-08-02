@@ -619,10 +619,10 @@ var ProfileBase = {
 
             for (let i = 0, j = data__["slw"].length - 1; i < data__["slw"].length, j > -1; i++, j--) {
                 let da = new Date()
-                let dataDa = data__.date[i].split("-") //2020-05-06
-                da.setDate(dataDa[2])
-                da.setMonth(dataDa[1] - 1)
-                da.setYear(dataDa[0])
+                let dataDa = data__.date[i].split("/") //5/20/2025
+                da.setDate(dataDa[1])
+                da.setMonth(dataDa[0] - 1)
+                da.setYear(dataDa[2])
 
                 if (data__["slw"].length == 1) {
                     da__ = new Date(da)
